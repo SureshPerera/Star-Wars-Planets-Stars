@@ -4,7 +4,8 @@ using System.Text.Json.Serialization;
 
 var baseAddress = "https://swapi.dev/api/";
 var requistUri = "planets";
-
+Console.WriteLine("\tStat Wars Planets Stats");
+Console.WriteLine("Waiting for loading...\n");
 IApiDataReader apiDataReader = new ApiDataReader();
 var json = await apiDataReader.Read(baseAddress, requistUri);
 
@@ -43,6 +44,7 @@ for(int i = 0; i < listName.Count; i++)
 {
     Console.WriteLine($"{listName[i],-20}{listDiameter[i],-20}{listSurfaceWater[i],-20}{listPopulation[i],-20}");
 }
+
 
 
 
