@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -16,21 +17,43 @@ foreach (var item in root.results)
 {
     listName.Add(item.name);
 }
-var listDiameter = new List<string>();
+var listDiameter = new List<int?>();
 
 foreach (var item in root.results)
 {
-    listDiameter.Add(item.diameter);
+
+    string result = item.diameter;
+    int convert = int.Parse(result);
+
+    listDiameter.Add(convert);
 }
-var listPopulation = new List<string>();
+var listPopulation = new List<int?>();
 foreach (var item in root.results)
 {
-    listPopulation.Add(item.population);
+    string result = item.population;
+    
+    if (int.TryParse(result,out int value))
+    {
+        listPopulation.Add(value);
+    }
+    else
+    {
+        listPopulation.Add(null);
+    }
 }
-var listSurfaceWater = new List<string>();
+var listSurfaceWater = new List<int?>();
 foreach (var item in root.results)
 {
-    listSurfaceWater.Add(item.surface_water);
+    string result = item.surface_water;
+    if(int.TryParse(result,out int value))
+    {
+        listSurfaceWater.Add(value);
+    }
+    else
+    {
+        listSurfaceWater.Add(null);
+    }
+
 }
 string name = "Name";
 string diameter = "Diameter";
@@ -42,12 +65,51 @@ Console.WriteLine(new string('-',80));
 
 for(int i = 0; i < listName.Count; i++)
 {
-    Console.WriteLine($"{listName[i],-20}{listDiameter[i],-20}{listSurfaceWater[i],-20}{listPopulation[i],-20}");
+    Console.WriteLine($"|{listName[i],-20}|{listDiameter[i],-20}|{listSurfaceWater[i],-20}|{listPopulation[i],-20}");
+}
+bool IsCorrect = true;
+
+while (IsCorrect)
+{
+
+    Console.WriteLine($"Select the statistic you are interested in :\n" +
+        $"{nameof(diameter)}\n{nameof(surface)}\n{nameof(population)}");
+    var Selection = Console.ReadLine();
+
+    switch (Selection)
+    {
+        case "diameter":
+            int? dmax = listDiameter.Max();
+            int? dmin = listDiameter.Min();
+            Console.WriteLine($"Maximum diameters is :{dmax} \nMinimum diameters is :{dmin}");
+            IsCorrect = false;
+            break;
+        case "surface":
+            int? smax = listSurfaceWater.Max();
+            int? smin = listSurfaceWater.Min();
+            Console.WriteLine($"Maximum Surface Level is: {smax} \nMinimum Surface Level is :{smin}");
+            IsCorrect = false;
+            break;
+        case "population":
+            int? pmax = listPopulation.Max();
+            int? pmin = listPopulation.Min();
+            Console.WriteLine($"Maximum Populations is : {pmax} \nMinimum diameters is : {pmin}");
+            IsCorrect = false;
+            break;
+        default:
+            Console.WriteLine("Please again check and Re-enter\n");
+            IsCorrect = true;
+            break;
+    }
+
 }
 
 
 
 
+
+
+Console.WriteLine("Press Any Key To Exit");
 Console.ReadLine();
 
 public interface IApiDataReader
